@@ -1,0 +1,135 @@
+{
+  "id": "1465928",
+  "name": "el-icon-zhao",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-zhao-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "588124",
+      "name": "网络",
+      "font_class": "wangluo1",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "606313",
+      "name": "计算机",
+      "font_class": "jisuanjicomputer160",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "657506",
+      "name": "信息",
+      "font_class": "xinxi",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "740914",
+      "name": "系统配置",
+      "font_class": "xitongpeizhi",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
+      "icon_id": "841831",
+      "name": "CPU 处理器 硬件",
+      "font_class": "cpuchuliqiyingjian",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "1415612",
+      "name": "拓扑",
+      "font_class": "tuopu",
+      "unicode": "e83d",
+      "unicode_decimal": 59453
+    },
+    {
+      "icon_id": "2155089",
+      "name": "信息",
+      "font_class": "xinxi1",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "2306160",
+      "name": "组队",
+      "font_class": "zudui",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "2570126",
+      "name": "身份",
+      "font_class": "shenfen-tianchong",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "5121525",
+      "name": "项目",
+      "font_class": "xiangmu",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "5532886",
+      "name": "管理",
+      "font_class": "guanli",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "5961318",
+      "name": "网关",
+      "font_class": "wangguan",
+      "unicode": "ec5d",
+      "unicode_decimal": 60509
+    },
+    {
+      "icon_id": "6357938",
+      "name": "概述",
+      "font_class": "ico",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "7195447",
+      "name": "网络",
+      "font_class": "wangluo",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "7565412",
+      "name": "角色权限",
+      "font_class": "jiaosequanxian",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "8605733",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "9111918",
+      "name": "系统",
+      "font_class": "xitong",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "9149788",
+      "name": "安全",
+      "font_class": "icon_anquan",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    }
+  ]
+}
