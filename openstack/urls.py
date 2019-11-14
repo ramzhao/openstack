@@ -25,5 +25,7 @@ urlpatterns = [
     path('api/getImageList', views.getImageList),
     path('api/login', views.login),
     path('api/images/delete_one',views.deleteImageOne),
-    path('api/getNetworksList',views.getNetworkList)
+    path('api/getNetworksList',views.getNetworkList),
+    path('api/getServersList',views.getServersList),
+    path('api/createServer',views.createServer)
 ]

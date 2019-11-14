@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import image from '@/components/projects/compute/images/image'
 import create_image_dialog from '@/components/projects/compute/images/create_image_dialog'
 import network from '@/components/system/network/network'
+import servers from '@/components/projects/compute/servers'
 
 Vue.use(Router)
 
@@ -33,9 +34,14 @@ export default new Router({
           path: 'network',
           name: 'network',
           component: network
+        },
+        {
+          path: 'servers',
+          name: 'servers',
+          component: servers
         }
         
-        
+
       ]
     },
     {

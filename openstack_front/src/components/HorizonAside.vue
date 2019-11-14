@@ -20,7 +20,7 @@
           <i class="iconfont el-icon-zhao-cpuchuliqiyingjian"></i>计算</template>
         <el-menu-item-group>
           <el-menu-item index="1-1-1"><i class="el-icon-caret-right"></i>概述</el-menu-item>
-          <el-menu-item index="1-1-2"><i class="el-icon-caret-right"></i>实例</el-menu-item>
+          <el-menu-item index="/Horizon/servers"><i class="el-icon-caret-right"></i>实例</el-menu-item>
           <el-menu-item index="1-1-3"><i class="el-icon-caret-right"></i>卷</el-menu-item>
           <el-menu-item index="/Horizon/image"><i class="el-icon-caret-right"></i>映像</el-menu-item>
           <el-menu-item index="1-1-5"><i class="el-icon-caret-right"></i>访问 & 安全</el-menu-item>

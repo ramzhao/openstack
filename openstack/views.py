@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+from openstack.api.compute import get_servers_list, create_server
 from openstack.api.glace import get_images_list, delete_one_image, create_image
 from openstack.api.keystone import get_token, get_projects, get_s_token
 from openstack.api.network import get_networks_list
@@ -94,3 +95,10 @@ def createImage(request):
 @check_login
 def getNetworkList(request):
     return HttpResponse(json.dumps(get_networks_list(request)))
+
+@check_login
+def getServersList(request):
+    return HttpResponse(json.dumps(get_servers_list(request)))
+
+def createServer(request):
+    return HttpResponse(create_server(request))

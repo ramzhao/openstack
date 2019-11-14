@@ -5,6 +5,12 @@ import json
 
 from openstack.api.config import Glance_URL
 
+def get_images_one(request,id):
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.get(Glance_URL + '/v2/images/'+id, headers=header)
+    image_name = json.loads(res.text)['name']
+    return image_name
 
 def get_images_list(request):
     token = request.session.get("token")
