@@ -3,7 +3,8 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-from openstack.api.compute import get_servers_list, create_server
+from openstack.api.compute import get_servers_list, create_server, start_server, reboot_server, stop_server, \
+    pause_server, unpause_server, get_remote_consoles
 from openstack.api.glace import get_images_list, delete_one_image, create_image
 from openstack.api.keystone import get_token, get_projects, get_s_token
 from openstack.api.network import get_networks_list
@@ -102,3 +103,58 @@ def getServersList(request):
 
 def createServer(request):
     return HttpResponse(create_server(request))
+
+@check_login
+def startServerOne(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       state_code = start_server(request,server_id)
+       return HttpResponse(state_code)
+    else:
+        return HttpResponse('request method error')
+
+@check_login
+def rebootServerOne(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       action = request.GET['action']
+       state_code = reboot_server(request,server_id,action)
+       return HttpResponse(state_code)
+    else:
+        return HttpResponse('request method error')
+
+@check_login
+def stopServerOne(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       state_code = stop_server(request,server_id)
+       return HttpResponse(state_code)
+    else:
+        return HttpResponse('request method error')
+
+@check_login
+def pauseServerOne(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       state_code = pause_server(request,server_id)
+       return HttpResponse(state_code)
+    else:
+        return HttpResponse('request method error')
+
+@check_login
+def unpauseServerOne(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       state_code = unpause_server(request,server_id)
+       return HttpResponse(state_code)
+    else:
+        return HttpResponse('request method error')
+
+@check_login
+def getRemoteConsoles(request):
+    if request.method == 'GET':
+       server_id =  request.GET['server_id']
+       res = get_remote_consoles(request,server_id)
+       return HttpResponse(res)
+    else:
+        return HttpResponse('request method error')

@@ -25,7 +25,7 @@
         type="selection"
         width="50">
       </el-table-column>
-       <el-table-column
+      <el-table-column
         prop="name"
         label="实例名称"
         width="200">
@@ -83,14 +83,25 @@
           <el-dropdown split-button type="primary" @click="handleClick" size="small">
             启动
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>硬重启实例</el-dropdown-item>
+              <el-dropdown-item @click.native="start_server_one(scope.row.id)"
+                                v-loading.fullscreen.lock="fullscreenLoading" divided>启动实例
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="reboot_server_one(scope.row.id,'HEAD')">硬重启实例</el-dropdown-item>
 
-              <el-dropdown-item>软重启实例</el-dropdown-item>
-              <el-dropdown-item @click.native="edit_image_dialog_open(scope.row)">关闭实例</el-dropdown-item>
+              <el-dropdown-item @click.native="reboot_server_one(scope.row.id,'SOFT')">软重启实例</el-dropdown-item>
+              <el-dropdown-item @click.native="stop_server_one(scope.row.id)">关闭实例</el-dropdown-item>
 
-              <el-dropdown-item>更新元数据</el-dropdown-item>
+              <el-dropdown-item @click.native="get_remote_consoles(scope.row.id)"
+                                divided>打开VNC控制台
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="pause_server_one(scope.row.id)"
+                                 divided>暂停实例
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="unpause_server_one(scope.row.id)"
+                                 divided>恢复实例
+              </el-dropdown-item>
               <el-dropdown-item @click.native="images_delete_one(scope.row.id)"
-                                v-loading.fullscreen.lock="fullscreenLoading" divided>删除映像
+                                v-loading.fullscreen.lock="fullscreenLoading" divided>删除实例
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -178,7 +189,8 @@
           protected: false
 
         },
-        tableData:[],
+        tableData: [],
+        remote_consoles_url: '',
         ImagesData: [{
           'name': 'cirros',
           'status': '活动',
@@ -194,16 +206,11 @@
 
         }],
         FlavorData: [{
-          'id': "'id': 1,  'name': m1.tiny, 'vcpu': 1,  'ram': 512MB, 'disk': 1GB, '公有':是"
-
-
-        }],
-        NetworksData: [{
+          'id': '\'id\': 1,  \'name\': m1.tiny, \'vcpu\': 1,  \'ram\': 512MB, \'disk\': 1GB, \'公有\':是'
 
         }],
-        Security_groupsData: [{
-
-        }]
+        NetworksData: [{}],
+        Security_groupsData: [{}]
 
       }
     },
@@ -242,11 +249,224 @@
           })
       },
 
+      //启动单个服务器
+      start_server_one (id) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/StartServerOne?server_id=' + id)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '正在启动中...'
+                })
+
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '启动失败!' + ' 返回信息：' + this.content
+                })
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
+      //停止单个服务器
+      stop_server_one (id) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/StopServerOne?server_id=' + id)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '正在停止该实例...'
+                })
+
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '停止失败!' + ' 返回信息：' + this.content
+                })
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
+
+      //暂停单个服务器
+      pause_server_one (id) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/PauseServerOne?server_id=' + id)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '正在暂停该实例...'
+                })
+
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '暂停失败!' + ' 返回信息：' + this.content
+                })
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
+      //恢复单个服务器
+      unpause_server_one (id) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/UnpauseServerOne?server_id=' + id)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '正在恢复该实例...'
+                })
+
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '恢复失败!' + ' 返回信息：' + this.content
+                })
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
+      //重启单个服务器
+      reboot_server_one (id, action) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/RebootServerOne?server_id=' + id + '&action=' + action)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '正在重启该实例...'
+                })
+
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '重启失败!' + ' 返回信息：' + this.content
+                })
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
+
+      //打开单个服务器控制台
+      get_remote_consoles (id) {
+        this.fullscreenLoading = true
+        this.axios.get('api/server/GetRemoteConsoles?server_id=' + id)
+          .then(response => {
+            console.log(response.data)
+            this.fullscreenLoading = false
+
+            this.content = response.data
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            } else {
+              if (this.content === 'error') {
+                this.$message({
+                  type: 'error',
+                  message: '打开失败!' + ' 返回信息：' + this.content
+                })
+
+              } else {
+                this.remote_consoles_url = this.content
+                this.$alert("<iframe src=\""+this.content+"\" height='500px' width='800px'></iframe>", 'VNC控制台', {
+                  dangerouslyUseHTMLString: true,center: true
+                })
+
+              }
+
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+
+          })
+
+      },
       /*映像操作函数*/
       //删除单个映像
-      images_delete_one (id) {
+      servers_delete_one (id) {
         console.log(id)
-        this.$confirm('此操作将删除该映像, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该服务器, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -303,7 +523,6 @@
 
         this.createServerDialogVisible = true
 
-
       },
       //  创建映像 上传
       create_server_onsubmit () {
@@ -324,7 +543,7 @@
                 type: 'success',
                 message: '创建实例成功，正在启动.....'
               })
-            } else{
+            } else {
               this.createServerDialogVisible = false
               this.$message({
                 type: 'error',
@@ -378,7 +597,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .el-dropdown {
     vertical-align: top;
   }
@@ -403,6 +622,10 @@
   .el-dialog__body {
     text-align: left;
 
+  }
+  .el-message-box {
+    width: 900px;
+    height: 600px;
   }
 
 

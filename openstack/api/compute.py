@@ -54,7 +54,8 @@ def get_servers_list(request):
             "availability_zone": servers_dict[i]['OS-EXT-AZ:availability_zone'],
             "task_state": str(servers_dict[i]['OS-EXT-STS:task_state']),
             "power_state": servers_dict[i]['OS-EXT-STS:power_state'],
-            "time": servers_dict[i]['created']
+            "time": servers_dict[i]['created'],
+            'id':servers_dict[i]['id']
         }
 
         servers_list.append(server_one)
@@ -70,3 +71,90 @@ def get_flavor_info(request, id):
     flavor_dict = json.loads(res.text)['flavor']
     flavor_name = flavor_dict['name']
     return flavor_name
+
+
+def get_remote_consoles(request,id):
+    body = {
+    "os-getVNCConsole": {
+        "type": "novnc"
+    }
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/'+id +'/action', data=json.dumps(body),headers=header)
+    print(eval(res.text))
+    print(res.headers)
+    remote_dict = json.loads(res.text)
+    if(res.status_code==200):
+        return remote_dict['console']['url']
+    else:
+        return 'error'
+
+def start_server(request,id):
+    body = {
+    "os-start" : None
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/'+id +'/action', data=json.dumps(body),headers=header)
+    print(Nova_URL + '/v2.1/servers/'+id +'/action')
+
+    print(res.headers)
+    print('启动服务器')
+    print(res.status_code)
+    return res.status_code
+
+def reboot_server(request,id,action):
+    body = {
+    "reboot" : {
+        "type" : action
+    }
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/'+id+'/action', data=json.dumps(body),headers=header)
+
+    print(res.headers)
+    print('重启服务器')
+    print(res.status_code)
+    return res.status_code
+
+def pause_server(request, id):
+    body = {
+    "pause": None
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
+    print('暂停服务器')
+    print(res.status_code)
+    return res.status_code
+
+def stop_server(request, id):
+    body = {
+    "os-stop" : None
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
+    print('停止服务器')
+    print(res.status_code)
+    return res.status_code
+
+def unpause_server(request, id):
+    body = {
+    "unpause": None
+}
+    print(json.dumps(body))
+    token = request.session.get("token")
+    header = {'X-Auth-Token': token}
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
+    print('取消暂停服务器')
+    print(res.status_code)
+    return res.status_code
+

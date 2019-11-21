@@ -27,5 +27,11 @@ urlpatterns = [
     path('api/images/delete_one',views.deleteImageOne),
     path('api/getNetworksList',views.getNetworkList),
     path('api/getServersList',views.getServersList),
-    path('api/createServer',views.createServer)
+    path('api/createServer',views.createServer),
+    path('api/server/StartServerOne',views.startServerOne),
+    path('api/server/StopServerOne',views.stopServerOne),
+    path('api/server/RebootServerOne',views.rebootServerOne),
+    path('api/server/PauseServerOne',views.pauseServerOne),
+    path('api/server/UnpauseServerOne',views.unpauseServerOne),
+    path('api/server/GetRemoteConsoles',views.getRemoteConsoles)
 ]
