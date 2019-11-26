@@ -5,6 +5,7 @@ import json
 
 from openstack.api.config import Glance_URL
 
+# 获取单个映像信息
 def get_images_one(request,id):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -12,6 +13,7 @@ def get_images_one(request,id):
     image_name = json.loads(res.text)['name']
     return image_name
 
+# 获取映像列表
 def get_images_list(request):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -74,6 +76,7 @@ def get_images_list(request):
     return images_list
 
 
+# 删除映像
 def delete_one_image(request, image_id):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -84,6 +87,7 @@ def delete_one_image(request, image_id):
     return res.status_code
 
 
+# 创建映像
 def create_image(request, new_image_dict):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}

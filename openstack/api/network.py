@@ -4,6 +4,7 @@ import json
 from openstack.api.config import Neutron_URL
 
 
+# 获取网络列表
 def get_networks_list(request):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -38,10 +39,11 @@ def get_networks_list(request):
             "external": str(networks_dict['networks'][i]['router:external'])
         }
 
-    networks_list.append(networks_one)
+        networks_list.append(networks_one)
     print(networks_list)
     return networks_list
 
+# 获取子网信息
 def getSubnetInfo(request,subnet_id):
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -58,9 +60,8 @@ def getSubnetInfo(request,subnet_id):
     # print(subnet_dict['subnet'][0]['admin_state_up'])
     # print(subnet_dict['subnet'][0]['router:external'])
 
-    for i in range(0, len(subnet_dict['networks'])):
         # 获取子网id
-       cidr = subnet_dict['subnet']['cidr']
+    cidr = subnet_dict['subnet']['cidr']
 
         # networks_one = {
         #     "id": networks_dict['networks'][i]['id'],

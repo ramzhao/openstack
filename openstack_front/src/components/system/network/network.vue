@@ -81,120 +81,8 @@
 
     </el-table>
 
-    <!--编辑映像弹窗-->
-    <el-dialog title="编辑映像" :visible.sync="editImagesDialogVisible" width="500px">
-      <el-form :model="form" label-width="100px" label-position="right">
-        <el-form-item label="名称" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input type="textarea" v-model="edit_image_form.description"></el-input>
-        </el-form-item>
-        <el-form-item label="内核标识" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.kernel_id" autocomplete="off" :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="内存盘标识" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.ramdisk_id" autocomplete="off" :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="架构" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.architecture" autocomplete="off" :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="格式" :label-width="formLabelWidth">
-          <el-select v-model="edit_image_form.format" placeholder="请选择映像格式">
-            <el-option label="ISO-光盘映像" value="iso"></el-option>
-            <el-option label="QCOW2-QEMU模拟器" value="qcow2"></el-option>
-          </el-select>
-        </el-form-item>
 
-        <el-form-item label="最小磁盘(GB)" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.minimum_disk" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="最低内存(MB)" :label-width="formLabelWidth">
-          <el-input v-model="edit_image_form.minimum_ram" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="公有" style="margin-bottom: 0px">
 
-          <el-checkbox name="type" v-model="edit_image_form.public"></el-checkbox>
-        </el-form-item>
-        <el-form-item label="受保护的" style="margin-bottom: 0px">
-
-          <el-checkbox name="type" v-model="edit_image_form.protected"></el-checkbox>
-
-        </el-form-item>
-
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editImagesDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="edit_image_onsubmit">保 存</el-button>
-      </div>
-    </el-dialog>
-    <!--创建映像弹窗-->
-    <el-dialog title="编辑映像" :visible.sync="createImagesDialogVisible" width="500px">
-      <el-form :model="create_image_form" label-width="100px" label-position="right" ref="create_image_form">
-        <el-form-item label="名称" :label-width="formLabelWidth">
-          <el-input v-model="create_image_form.name" autocomplete="off" name="name"></el-input>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input type="textarea" v-model="create_image_form.description" name="description"></el-input>
-        </el-form-item>
-        <el-form-item label="映像源" :label-width="formLabelWidth">
-          <el-select v-model="create_image_form.image_source">
-            <el-option label="映像位置" value="shanghai"></el-option>
-            <el-option label="映像文件" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="映像位置" :label-width="formLabelWidth">
-          <el-input v-model="create_image_form.image_location" autocomplete="off" name="image_location"></el-input>
-        </el-form-item>
-        <el-form-item label="选择映像" :label-width="formLabelWidth">
-          <el-upload
-            action=""
-            :http-request="handleFile"
-            :multiple="false"
-            :limit="1"
-            :on-exceed="handleExceed"
-            :file-list="fileList"
-          >
-            <el-button size="small" type="primary">点击选择</el-button>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="格式" :label-width="formLabelWidth">
-          <el-select v-model="create_image_form.format" placeholder="请选择映像格式" name="format">
-            <el-option label="ISO-光盘映像" value="iso"></el-option>
-            <el-option label="QCOW2-QEMU模拟器" value="qcow2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="架构" :label-width="formLabelWidth">
-          <el-input v-model="create_image_form.architecture" autocomplete="off" name="architecture"></el-input>
-        </el-form-item>
-        <el-form-item label="最小磁盘(GB)" :label-width="formLabelWidth">
-          <el-input v-model="create_image_form.minimum_disk" autocomplete="off" name="minimum_disk"></el-input>
-        </el-form-item>
-        <el-form-item label="最低内存(MB)" :label-width="formLabelWidth">
-          <el-input v-model="create_image_form.minimum_ram" autocomplete="off" name="minimum_ram"></el-input>
-        </el-form-item>
-        <el-form-item label="复制数据" style="margin-bottom: 0px">
-
-          <el-checkbox name="copy_data" v-model="create_image_form.copy_data"></el-checkbox>
-        </el-form-item>
-        <el-form-item label="公有" style="margin-bottom: 0px">
-
-          <el-checkbox name="public" v-model="create_image_form.public"></el-checkbox>
-        </el-form-item>
-        <el-form-item label="受保护的" style="margin-bottom: 0px">
-
-          <el-checkbox name="protected" v-model="create_image_form.protected"></el-checkbox>
-
-        </el-form-item>
-
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="createImagesDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="create_image_onsubmit">创 建</el-button>
-      </div>
-    </el-dialog>
 
 
   </div>
@@ -239,17 +127,7 @@
           protected: false
 
         },
-        tableData: [{
-          'project': 'admin',
-          'name': 'provider',
-          'status': '活动',
-          'admin_state_up': '启动',
-          'cidr': 'provider 10.18.200.0/24',
-          'shared': '否',
-          'external': '是',
-          'id': 12345678,
-
-        }]
+        tableData: []
 
       }
     },
@@ -259,18 +137,7 @@
     },
 
     methods: {
-      toggleSelection (rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row)
-          })
-        } else {
-          this.$refs.multipleTable.clearSelection()
-        }
-      },
-      handleSelectionChange (val) {
-        this.multipleSelection = val
-      },
+
       async getData () {
         this.axios.get('api/getNetworksList')
           .then(response => {
@@ -345,69 +212,18 @@
       handleExceed (files, fileList) {
         this.$message.warning(`最多上传 ${files.length} 个文件`)
       },
-      //  创建映像 上传
-      create_image_onsubmit () {
-        let form = this.$refs['create_image_form'].$el
-        let formData = new FormData()
-        formData.append('name', this.create_image_form.name)
-        formData.append('description', this.create_image_form.description)
-        formData.append('image_location', this.create_image_form.image_location)
-        formData.append('architecture', this.create_image_form.architecture)
-        formData.append('format', this.create_image_form.format)
-        formData.append('minimum_ram', this.create_image_form.minimum_ram)
-        formData.append('minimum_disk', this.create_image_form.minimum_disk)
-        formData.append('protected', this.create_image_form.protected)
-        formData.append('public', this.create_image_form.public)
-        formData.append('copy_data', this.create_image_form.copy_data)
-        formData.append('files', this.fileList[0])
-        console.log(this.fileList[0])
-
-        this.axios.post('/api/images/create_image', formData)
-          .then(response => {
-            if (response.code === 200) {
-              // 提交成功将要执行的代码
-            }
+     /* toggleSelection (rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
           })
-          .catch(function (error) {
-            // console.log(error)
-          })
-
-      },
-      edit_image_dialog_open (row) {
-        var ispublic
-        if (row.visibility === '是') {
-          ispublic = true
         } else {
-          ispublic = false
+          this.$refs.multipleTable.clearSelection()
         }
-
-        var isprotected
-        if (row.protected === '是') {
-          isprotected = true
-        } else {
-          isprotected = false
-        }
-        this.edit_image_form = {
-          name: row.name,
-          description: row.description,
-          kernel_id: '',
-          ramdisk_id: '',
-          architecture: row.architecture,
-          format: row.disk_format,
-          minimum_disk: row.minimum_disk,
-          minimum_ram: row.minimum_ram,
-          public: ispublic,
-          protected: isprotected
-        }
-        console.log(this.edit_image_form)
-
-        this.editImagesDialogVisible = true
-
       },
-      // 编辑映像 上传
-      edit_image_onsubmit () {
-
-      }
+      handleSelectionChange (val) {
+        this.multipleSelection = val
+      },*/
 
     }
 

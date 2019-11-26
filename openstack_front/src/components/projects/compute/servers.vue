@@ -80,7 +80,7 @@
         label="Actions"
       >
         <template slot-scope="scope">
-          <el-dropdown split-button type="primary" @click="handleClick" size="small">
+          <el-dropdown split-button type="primary" @click="start_server_one(scope.row.id)" size="small">
             启动
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="start_server_one(scope.row.id)"
@@ -95,12 +95,12 @@
                                 divided>打开VNC控制台
               </el-dropdown-item>
               <el-dropdown-item @click.native="pause_server_one(scope.row.id)"
-                                 divided>暂停实例
+                                divided>暂停实例
               </el-dropdown-item>
               <el-dropdown-item @click.native="unpause_server_one(scope.row.id)"
-                                 divided>恢复实例
+                                divided>恢复实例
               </el-dropdown-item>
-              <el-dropdown-item @click.native="images_delete_one(scope.row.id)"
+              <el-dropdown-item @click.native="servers_delete_one(scope.row.id)"
                                 v-loading.fullscreen.lock="fullscreenLoading" divided>删除实例
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -110,42 +110,171 @@
 
     </el-table>
 
+    <el-dialog :visible.sync="openServerConsoleDialogVisible" >
+      <el-link :href="remote_consoles_url" target="_blank">单击在新标签页打开控制台</el-link>
+      <iframe :src="remote_consoles_url" width="800px" height="500px"></iframe>
+
+    </el-dialog>
+
 
     <!--创建映像弹窗-->
-    <el-dialog title="启动实例" :visible.sync="createServerDialogVisible" width="500px">
-      <el-form :model="form" label-width="100px" label-position="right">
-        <el-form-item label="实例名称" :label-width="formLabelWidth">
-          <el-input v-model="create_server_form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="可用区域" :label-width="formLabelWidth">
-          <el-input v-model="create_server_form.availability_zone" autocomplete="off"></el-input>
-        </el-form-item>
+    <el-dialog title="创建实例" :visible.sync="createServerDialogVisible" width="800px" top="10vh">
+      <el-tabs tab-position="left" style="height: 450px;" type="border-card">
+        <el-tab-pane label="详细信息">
+          <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+            <el-form-item label="实例名称">
+              <el-input v-model="server_name" style="width: 217px"></el-input>
+            </el-form-item>
+            <el-form-item label="可用域">
+              <el-select v-model="nova" placeholder="请选择可用域">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="映像">
+          <el-table
+            ref="singleTable"
+            :data="imagesTableData"
+            tooltip-effect="dark"
+            stripe="true"
+            border="true"
+            style="width: 100%"
+            max-height="400px"
+            @current-change="handleCurrentChange"
+            highlight-current-row
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              prop="name"
+              label="映像名称"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="size"
+              label="大小"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="visibility"
+              label="公有"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="disk_format"
+              label="格式"
+              width="150">
+            </el-table-column>
 
-        <el-form-item label="映像" :label-width="formLabelWidth">
-          <el-select v-model="create_server_form.imageRef" placeholder="请选择映像">
-            <el-option label="cirros" value="cirros"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="flavor" :label-width="formLabelWidth">
-          <el-select v-model="create_server_form.flavorRef" placeholder="请选择flavor">
-            <el-option v-for="(item,index) in FlavorData" :label="item.id" value="iso" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="网络" :label-width="formLabelWidth">
-          <el-select v-model="create_server_form.networks" placeholder="请选择网络">
-            <el-option label="provider" :value="create_server_form.networks"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="安全组" :label-width="formLabelWidth">
-          <el-select v-model="create_server_form.security_groups" placeholder="请选择安全组">
-            <el-option label="default" :value="create_server_form.security_groups"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="create_server_onsubmit">启动实例</el-button>
-          <el-button @click="createServerDialogVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="flavor">
+          <el-table
+            ref="singleTable"
+            :data="flavorTableData"
+            tooltip-effect="dark"
+            stripe="true"
+            border="true"
+            style="width: 100%"
+            max-height="400px"
+            @current-change="handleCurrentChange_flavor"
+            highlight-current-row
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              prop="name"
+              label="名称"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="vcpu"
+              label="VCPU数"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="ram"
+              label="RAM"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="disk"
+              label="磁盘总计"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="visibility"
+              label="公有"
+              width="100">
+            </el-table-column>
+
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="网络">
+          <el-table
+            ref="singleTable"
+            :data="networkTableData"
+            tooltip-effect="dark"
+            stripe="true"
+            border="true"
+            style="width: 100%"
+            max-height="400px"
+            @current-change="handleCurrentChange_network"
+            highlight-current-row
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              prop="name"
+              label="网络名称"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="cidr"
+              label="关联子网"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="shared"
+              label="共享"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="状态"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="admin_state_up"
+              label="管理状态"
+              width="100">
+            </el-table-column>
+
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="安全组">
+          <el-form>
+            <el-form-item label="安全组">
+              <el-select v-model="safe_group" placeholder="请选择安全组">
+                <el-option
+                  key="default"
+                  label="default"
+                  value="default">
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+          </el-form>
+
+
+        </el-tab-pane>
+        <el-tab-pane label="密钥对">密钥对</el-tab-pane>
+      </el-tabs>
+      <div style="margin-left: 70%;margin-top: 30px">
+        <el-button type="primary" style="" @click="create_server_onsubmit">创建实例</el-button>
+        <el-button plain style="">取消</el-button>
+      </div>
+
 
     </el-dialog>
 
@@ -160,10 +289,29 @@
     components: {},
     data () {
       return {
+
+        imagesTableData: []
+        ,
+        flavorTableData: [],
+        networkTableData: [],
+        // 创建映像弹窗变量变量
+        currentRow: null,
+        currentRow_flavor: null,
+        currentRow_network: null,
+        options: [{
+          value: 'nova',
+          label: 'nova'
+        }],
+
+        server_name: '',
+        nova: 'nova',
+        safe_group: 'default',
+
         fullscreenLoading: false,
         multipleSelection: [],
         createServerDialogVisible: false,
         editImagesDialogVisible: false,
+        openServerConsoleDialogVisible: false,
         formLabelWidth: '100px',
         fileList: [],
         create_server_form: {
@@ -191,6 +339,7 @@
         },
         tableData: [],
         remote_consoles_url: '',
+
         ImagesData: [{
           'name': 'cirros',
           'status': '活动',
@@ -220,7 +369,19 @@
     },
 
     methods: {
-      toggleSelection (rows) {
+      handleCurrentChange (val) {
+        this.currentRow = val
+        console.log(val)
+      },
+      handleCurrentChange_flavor (val) {
+        this.currentRow_flavor = val
+        console.log(val)
+      },
+      handleCurrentChange_network (val) {
+        this.currentRow_network = val
+        console.log(val)
+      },
+      /*toggleSelection (rows) {
         if (rows) {
           rows.forEach(row => {
             this.$refs.multipleTable.toggleRowSelection(row)
@@ -228,7 +389,7 @@
         } else {
           this.$refs.multipleTable.clearSelection()
         }
-      },
+      },*/
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
@@ -237,6 +398,57 @@
           .then(response => {
             this.content = response.data
             this.tableData = this.content
+            console.log(this.content)
+            console.log(typeof (this.content))
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+
+      async getImagesData () {
+        this.axios.get('api/getImageList')
+          .then(response => {
+            this.content = response.data
+            this.imagesTableData = this.content
+            console.log(this.content)
+            console.log(typeof (this.content))
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+
+      async getNetworkData () {
+        this.axios.get('api/getNetworksList')
+          .then(response => {
+            this.content = response.data
+            this.networkTableData = this.content
+            console.log(this.content)
+            console.log(typeof (this.content))
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+
+      async getFlavorData () {
+        this.axios.get('api/getFlavorsList')
+          .then(response => {
+            this.content = response.data
+            this.flavorTableData = this.content
             console.log(this.content)
             console.log(typeof (this.content))
             if (this.content === 'not login in') {
@@ -447,9 +659,7 @@
 
               } else {
                 this.remote_consoles_url = this.content
-                this.$alert("<iframe src=\""+this.content+"\" height='500px' width='800px'></iframe>", 'VNC控制台', {
-                  dangerouslyUseHTMLString: true,center: true
-                })
+                this.openServerConsoleDialogVisible = true
 
               }
 
@@ -462,8 +672,8 @@
           })
 
       },
-      /*映像操作函数*/
-      //删除单个映像
+
+      //删除单个实例
       servers_delete_one (id) {
         console.log(id)
         this.$confirm('此操作将删除该服务器, 是否继续?', '提示', {
@@ -472,7 +682,7 @@
           type: 'warning'
         }).then(() => {
           this.fullscreenLoading = true
-          this.axios.get('api/images/delete_one?image_id=' + id)
+          this.axios.get('api/deleteServer?server_id=' + id)
             .then(response => {
               this.fullscreenLoading = false
               this.content = response.data
@@ -485,7 +695,6 @@
                     type: 'success',
                     message: '删除成功!'
                   })
-                  window.location.reload()
                 } else {
                   this.$message({
                     type: 'error',
@@ -521,34 +730,41 @@
       },
       OpencreateServerDialogVisible () {
 
+        this.getImagesData()
+        this.getNetworkData()
+        this.getFlavorData()
         this.createServerDialogVisible = true
 
       },
-      //  创建映像 上传
+      //  创建实例
       create_server_onsubmit () {
-        // const params = new URLSearchParams()
-        // params.append('name', this.create_image_form.user)
-        // params.append('imageRef', this.create_image_form.pass)
-        // params.append('flavorRef', this.create_image_form.domain)
-        // params.append('availability_zone', this.create_image_form.domain)
-        // params.append('networks', this.create_image_form.domain)
-        // params.append('security_groups', this.create_image_form.domain)
-        this.axios.post('/api/createServer')
+        let params = new FormData();
+        params.append('name', this.server_name)
+        params.append('imageRef', this.currentRow['id'])
+        params.append('flavorRef', this.currentRow_flavor['id'])
+        params.append('networks', this.currentRow_network['id'])
+        console.log(params)
+
+        this.axios.post('/api/createServer',params)
           .then(response => {
             this.content = response.data
             console.log(this.content)
-            if (this.content === 202) {
-              this.createServerDialogVisible = false
-              this.$message({
-                type: 'success',
-                message: '创建实例成功，正在启动.....'
-              })
+            if (this.content === 'not login in') {
+              alert('请先登录！')
+              this.$router.push('/Login')
             } else {
-              this.createServerDialogVisible = false
-              this.$message({
-                type: 'error',
-                message: '创建实例失败!'
-              })
+              if (this.content === 202) {
+                this.$message({
+                  type: 'success',
+                  message: '创建实例成功！'
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '创建失败!' + ' 返回信息：' + this.content
+                })
+              }
+
             }
           })
           .catch(function (error) {
@@ -556,48 +772,15 @@
           })
 
       },
-      edit_image_dialog_open (row) {
-        var ispublic
-        if (row.visibility === '是') {
-          ispublic = true
-        } else {
-          ispublic = false
-        }
 
-        var isprotected
-        if (row.protected === '是') {
-          isprotected = true
-        } else {
-          isprotected = false
-        }
-        this.edit_image_form = {
-          name: row.name,
-          description: row.description,
-          kernel_id: '',
-          ramdisk_id: '',
-          architecture: row.architecture,
-          format: row.disk_format,
-          minimum_disk: row.minimum_disk,
-          minimum_ram: row.minimum_ram,
-          public: ispublic,
-          protected: isprotected
-        }
-        console.log(this.edit_image_form)
 
-        this.editImagesDialogVisible = true
-
-      },
-      // 编辑映像 上传
-      edit_image_onsubmit () {
-
-      }
 
     }
 
   }
 </script>
 
-<style>
+<style scoped>
   .el-dropdown {
     vertical-align: top;
   }
@@ -623,8 +806,7 @@
     text-align: left;
 
   }
-  .el-message-box {
-    width: 900px;
+  .vnc_dialog {
     height: 600px;
   }
 

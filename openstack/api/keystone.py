@@ -5,7 +5,7 @@ import json
 from openstack.api.config import *
 from openstack.api.config import hello as hello1
 
-
+# 获取无范围token
 def get_token(domain, user, password):
     hello1()
     body = {
@@ -44,7 +44,7 @@ def get_token(domain, user, password):
         return {'token': res.headers['X-Subject-Token'],'user_id': user_id}
 
 
-
+# 获取项目id
 def get_projects(f_token):
     header = {'X-Auth-Token': f_token}
     res = requests.get(identity_public_URL + '/auth/projects', headers=header)
@@ -55,7 +55,7 @@ def get_projects(f_token):
     print("域id" + domain_id)
     return project_id
 
-
+# 获取选定项目的token
 def get_s_token(project_id,user_id,password):
     body = {
         "auth": {

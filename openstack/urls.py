@@ -24,14 +24,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/getImageList', views.getImageList),
     path('api/login', views.login),
-    path('api/images/delete_one',views.deleteImageOne),
-    path('api/getNetworksList',views.getNetworkList),
-    path('api/getServersList',views.getServersList),
-    path('api/createServer',views.createServer),
-    path('api/server/StartServerOne',views.startServerOne),
-    path('api/server/StopServerOne',views.stopServerOne),
-    path('api/server/RebootServerOne',views.rebootServerOne),
-    path('api/server/PauseServerOne',views.pauseServerOne),
-    path('api/server/UnpauseServerOne',views.unpauseServerOne),
-    path('api/server/GetRemoteConsoles',views.getRemoteConsoles)
+    path('api/images/delete_one', views.deleteImageOne),
+    path('api/getNetworksList', views.getNetworkList),
+    path('api/getServersList', views.getServersList),
+    path('api/getFlavorsList',views.getFlavorsList),
+    path('api/createServer', views.createServer),
+    path('api/deleteServer', views.deleteServer),
+    path('api/server/StartServerOne', views.startServerOne),
+    path('api/server/StopServerOne', views.stopServerOne),
+    path('api/server/RebootServerOne', views.rebootServerOne),
+    path('api/server/PauseServerOne', views.pauseServerOne),
+    path('api/server/UnpauseServerOne', views.unpauseServerOne),
+    path('api/server/GetRemoteConsoles', views.getRemoteConsoles)
+
 ]

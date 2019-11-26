@@ -269,18 +269,11 @@
     },
 
     methods: {
-      toggleSelection (rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row)
-          })
-        } else {
-          this.$refs.multipleTable.clearSelection()
-        }
-      },
+
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
+      //获取映像列表数据
       async getData () {
         this.axios.get('api/getImageList')
           .then(response => {
@@ -312,6 +305,7 @@
             .then(response => {
               this.fullscreenLoading = false
               this.content = response.data
+              // 判断登录
               if (this.content === 'not login in') {
                 alert('请先登录！')
                 this.$router.push('/Login')
@@ -345,16 +339,7 @@
         })
 
       },
-      handleClick () {
-        alert('button click')
-      },
-      handleFile (response) {
-        this.fileList.push(response.file)
-      },
 
-      handleExceed (files, fileList) {
-        this.$message.warning(`最多上传 ${files.length} 个文件`)
-      },
       //  创建映像 上传
       create_image_onsubmit () {
         let form = this.$refs['create_image_form'].$el
@@ -417,7 +402,26 @@
       // 编辑映像 上传
       edit_image_onsubmit () {
 
-      }
+      },
+      /*toggleSelection (rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
+          })
+        } else {
+          this.$refs.multipleTable.clearSelection()
+        }
+      },
+      handleClick () {
+        alert('button click')
+      },
+      handleFile (response) {
+        this.fileList.push(response.file)
+      },
+
+      handleExceed (files, fileList) {
+        this.$message.warning(`最多上传 ${files.length} 个文件`)
+      },*/
 
     }
 
