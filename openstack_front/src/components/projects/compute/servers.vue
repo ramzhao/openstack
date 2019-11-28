@@ -110,7 +110,7 @@
 
     </el-table>
 
-    <el-dialog :visible.sync="openServerConsoleDialogVisible" >
+    <el-dialog :visible.sync="openServerConsoleDialogVisible" title="VNC控制台">
       <el-link :href="remote_consoles_url" target="_blank">单击在新标签页打开控制台</el-link>
       <iframe :src="remote_consoles_url" width="800px" height="500px"></iframe>
 
@@ -126,7 +126,7 @@
               <el-input v-model="server_name" style="width: 217px"></el-input>
             </el-form-item>
             <el-form-item label="可用域">
-              <el-select v-model="nova" placeholder="请选择可用域">
+              <el-select v-model="nova" placeholder="请选择可用域" style="width: 217px">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -255,7 +255,7 @@
         <el-tab-pane label="安全组">
           <el-form>
             <el-form-item label="安全组">
-              <el-select v-model="safe_group" placeholder="请选择安全组">
+              <el-select v-model="safe_group" placeholder="请选择安全组" style="width: 217px">
                 <el-option
                   key="default"
                   label="default"
@@ -754,6 +754,7 @@
               this.$router.push('/Login')
             } else {
               if (this.content === 202) {
+                this.createServerDialogVisible = false
                 this.$message({
                   type: 'success',
                   message: '创建实例成功！'
