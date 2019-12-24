@@ -105,7 +105,7 @@ export default {
 <style scoped>
   .background {
 
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     background-color: rgb(50, 64, 87);

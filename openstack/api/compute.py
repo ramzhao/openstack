@@ -3,6 +3,7 @@ import json
 from openstack.api.config import Nova_URL
 from openstack.api.glace import get_images_list, get_images_one
 
+
 # 创建实例
 def create_server(request):
     if request.method == 'POST':
@@ -62,7 +63,7 @@ def get_servers_list(request):
             "task_state": str(servers_dict[i]['OS-EXT-STS:task_state']),
             "power_state": servers_dict[i]['OS-EXT-STS:power_state'],
             "time": servers_dict[i]['created'],
-            'id':servers_dict[i]['id']
+            'id': servers_dict[i]['id']
         }
 
         servers_list.append(server_one)
@@ -79,6 +80,7 @@ def get_flavor_info(request, id):
     flavor_dict = json.loads(res.text)['flavor']
     flavor_name = flavor_dict['name']
     return flavor_name
+
 
 # 获取flavors列表
 def get_flavor_list(request):
@@ -110,62 +112,65 @@ def get_flavor_list(request):
 
 
 # 获取vnc控制台链接
-def get_remote_consoles(request,id):
+def get_remote_consoles(request, id):
     body = {
-    "os-getVNCConsole": {
-        "type": "novnc"
+        "os-getVNCConsole": {
+            "type": "novnc"
+        }
     }
-}
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
-    res = requests.post(Nova_URL + '/v2.1/servers/'+id +'/action', data=json.dumps(body),headers=header)
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
     print(eval(res.text))
     print(res.headers)
     remote_dict = json.loads(res.text)
-    if(res.status_code==200):
+    if (res.status_code == 200):
         return remote_dict['console']['url']
     else:
         return 'error'
 
+
 # 启动实例
-def start_server(request,id):
+def start_server(request, id):
     body = {
-    "os-start" : None
-}
+        "os-start": None
+    }
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
-    res = requests.post(Nova_URL + '/v2.1/servers/'+id +'/action', data=json.dumps(body),headers=header)
-    print(Nova_URL + '/v2.1/servers/'+id +'/action')
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
+    print(Nova_URL + '/v2.1/servers/' + id + '/action')
 
     print(res.headers)
     print('启动服务器')
     print(res.status_code)
     return res.status_code
 
+
 # 重启实例
-def reboot_server(request,id,action):
+def reboot_server(request, id, action):
     body = {
-    "reboot" : {
-        "type" : action
+        "reboot": {
+            "type": action
+        }
     }
-}
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
-    res = requests.post(Nova_URL + '/v2.1/servers/'+id+'/action', data=json.dumps(body),headers=header)
+    res = requests.post(Nova_URL + '/v2.1/servers/' + id + '/action', data=json.dumps(body), headers=header)
 
     print(res.headers)
     print('重启服务器')
     print(res.status_code)
     return res.status_code
 
+
 # 暂停实例
 def pause_server(request, id):
     body = {
-    "pause": None
-}
+        "pause": None
+    }
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -174,11 +179,12 @@ def pause_server(request, id):
     print(res.status_code)
     return res.status_code
 
+
 # 停止实例
 def stop_server(request, id):
     body = {
-    "os-stop" : None
-}
+        "os-stop": None
+    }
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -187,11 +193,12 @@ def stop_server(request, id):
     print(res.status_code)
     return res.status_code
 
+
 # 恢复实例
 def unpause_server(request, id):
     body = {
-    "unpause": None
-}
+        "unpause": None
+    }
     print(json.dumps(body))
     token = request.session.get("token")
     header = {'X-Auth-Token': token}
@@ -199,6 +206,7 @@ def unpause_server(request, id):
     print('取消暂停服务器')
     print(res.status_code)
     return res.status_code
+
 
 # 删除实例
 def delete_server(request):

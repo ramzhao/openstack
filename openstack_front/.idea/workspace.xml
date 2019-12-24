@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96a04758-aa32-45db-aaf1-57a74c568a13" name="Default Changelist" comment="" />
+    <list default="true" id="96a04758-aa32-45db-aaf1-57a74c568a13" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../openstack/api/compute.py" beforeDir="false" afterPath="$PROJECT_DIR$/../openstack/api/compute.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="npm.npm serve">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:8080">
       <method v="2" />
     </configuration>
@@ -136,6 +138,8 @@
       <workItem from="1574667999501" duration="7211000" />
       <workItem from="1574767609672" duration="4330000" />
       <workItem from="1574906519291" duration="1314000" />
+      <workItem from="1575376355130" duration="1381000" />
+      <workItem from="1576500963248" duration="9000" />
     </task>
     <servers />
   </component>

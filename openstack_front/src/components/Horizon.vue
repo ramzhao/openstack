@@ -19,7 +19,8 @@
           height="50px" class="breadcrumb-header">
           <el-breadcrumb separator-class="el-icon-arrow-right"
                          style="line-height: 50px">
-            <el-breadcrumb-item v-for="breed in $store.state.breadList" v-bind:key="breed"> {{breed}} </el-breadcrumb-item>
+            <el-breadcrumb-item v-for="breed in $store.state.breadList" v-bind:key="breed"> {{breed}}
+            </el-breadcrumb-item>
 
             <div class="avator">
               <el-dropdown>
@@ -58,36 +59,36 @@
 </template>
 
 <script>
-// import HorizonHeader from '@/components/HorizonHeader'
-import HorizonAside from '@/components/HorizonAside'
+  // import HorizonHeader from '@/components/HorizonHeader'
+  import HorizonAside from '@/components/HorizonAside'
 
-export default {
-  name: 'Horizon',
-  components: {
-    /* HorizonHeader, */
-    HorizonAside
+  export default {
+    name: 'Horizon',
+    components: {
+      /* HorizonHeader, */
+      HorizonAside
 
-  },
-  data () {
-    return {
-      squareUrl: 'http://elm.cangdu.org/img/default.jpg'
-    }
-  },
-  methods: {
-    handleSelect (key, keyPath) {
-      console.log(key, keyPath)
     },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
+    data () {
+      return {
+        squareUrl: 'http://elm.cangdu.org/img/default.jpg'
+      }
     },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    created(){
-      console.log(this.breadList)
+    methods: {
+      handleSelect (key, keyPath) {
+        console.log(key, keyPath)
+      },
+      handleOpen (key, keyPath) {
+        console.log(key, keyPath)
+      },
+      handleClose (key, keyPath) {
+        console.log(key, keyPath)
+      },
+      created () {
+        console.log(this.breadList)
+      }
     }
   }
-}
 </script>
 
 <style scoped>
